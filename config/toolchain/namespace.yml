@@ -1,0 +1,25 @@
+---
+kind: wcpNamespace
+metadata:
+  vcenter: vcenter.lab.crdant.net
+  datacenter: garage
+  cluster: homelab
+spec:
+  namespace: toolchain
+  description: 
+  access_list:
+  - role: EDIT
+    subject_type: USER
+    subject: administrator
+    domain: crdant.net
+  - role: EDIT
+    subject_type: GROUP
+    subject: operators
+    domain: lab.crdant.net
+  - role: VIEW
+    subject_type: GROUP
+    subject: developers
+    domain: lab.crdant.net
+  storage_specs:
+  - policy: vsan
+  resource_specs:

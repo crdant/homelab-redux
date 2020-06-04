@@ -1,0 +1,9 @@
+apiVersion: vendir.k14s.io/v1alpha1
+kind: Config
+directories:
+- path: vendor
+  contents:
+  - path: github.com/papivot/wcpctl
+    git:
+      url: https://github.com/papivot/wcpctl
+      ref: master
