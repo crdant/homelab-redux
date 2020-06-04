@@ -1,0 +1,13 @@
+#@ load("@ytt:overlay", "overlay")
+#@ load("java_opts.star", "update_java_opts")
+
+#@overlay/match by=overlay.subset({"kind": "Deployment", "metadata":{"name":"uaa"}})
+---
+spec:
+  template:
+    spec:
+      containers:
+      #@overlay/match by=overlay.subset({"name":"uaa"})
+      - env:
+        #@overlay/match by=overlay.subset({"name": "JAVA_OPTS"})
+        - value: #@overlay/replace via=lambda opts,_: update_java_opts(opts)

@@ -1,0 +1,40 @@
+#@ load("@ytt:data", "data")
+#@ load("@ytt:overlay", "overlay")
+#@ load("@ytt:assert", "assert")
+
+
+#@ def customize(config):
+#@   return overlay.apply(config,issuer(),ldap(),login())
+#@ end
+
+#@ def login():
+#@overlay/match by=overlay.all
+---
+login:
+  #@overlay/match missing_ok=True
+  mfa: #@ data.values.login.mfa
+  #@overlay/match missing_ok=True
+  branding: #@ data.values.login.branding
+#@ end
+
+#@ def issuer():
+#@overlay/match by=overlay.all
+---
+issuer:
+  #@overlay/match missing_ok=True
+  uri: https://uaa.tools.lab.crdant.net
+#@ end
+
+
+#@ def ldap():
+#@overlay/match by=overlay.all
+---
+#@overlay/match missing_ok=True
+spring_profiles: ldap
+#@overlay/match missing_ok=True
+ldap:
+  profile:
+    file: ldap/ldap-search-and-bind.xml
+  base: #@ data.values.ldap.base
+#@ end
+

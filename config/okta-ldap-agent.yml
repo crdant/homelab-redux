@@ -1,0 +1,143 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: okta-ldap-agent-configuration
+  namespace: operations
+data:
+  InstallOktaLDAPAgent.conf: |-
+    # Okta LDAP Agent Install configuration file.
+    # This file is read during the post-installation or configuration time only.
+
+    orgUrl=https://login.lab.crdant.net
+
+    ldapHost=directory.lab.crdant.net
+    ldapAdminDN=cn=admin,dc=crdant,dc=net
+    ldapPort=389
+    baseDN=o=homelab,dc=crdant,dc=net
+
+    ldapUseSSL=true
+    ldapSSLPort=636
+
+    proxyEnabled=false
+    proxyHost=
+    proxyPort=
+    proxyUser=
+    sslPinningEnabled=false
+  logback.xml: |-
+    <?xml version="1.0" encoding="UTF-8"?>
+    <configuration scan="true" scanPeriod="60 seconds">
+
+      <!-- Logback has access to the properties files of our app -->
+      <property resource="default.properties"/>
+
+      <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
+          <Target>System.out</Target>
+          <encoder>
+              <!--[ %T ] [ %t ][ %5p] [%c{1}:%L] [org=%o, aid=%u, method=%S] - %m%n-->
+              <pattern>[ %date{yyyy-MM-dd HH:mm:ss.SSS} ] [ %thread ] [ %-5level ] [%logger{0}:%L] - %message %n</pattern>
+          </encoder>
+      </appender>
+
+      <appender name="logfile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+          <!--See also http://logback.qos.ch/manual/appenders.html#RollingFileAppender-->
+          <File>${agent_home}/logs/agent.log</File>
+          <encoder>
+              <!--[ %T ] [ %t ][ %5p] [%c{1}:%L] [org=%o, aid=%u, method=%S] - %m%n-->
+              <pattern>[ %date{yyyy-MM-dd HH:mm:ss.SSS} ] [ %thread ] [ %-5level ] [%logger{0}:%L] - %message %n</pattern>
+          </encoder>
+          <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+              <maxIndex>5</maxIndex>
+              <FileNamePattern>${agent_home}/logs/agent.log.%i</FileNamePattern>
+          </rollingPolicy>
+          <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+              <maxFileSize>20MB</maxFileSize>
+          </triggeringPolicy>
+      </appender>
+
+      <!--switch this logger level to DEBUG to get debug log-->
+      <logger name="com.okta.ldap_agent" level="INFO">
+          <appender-ref ref="logfile"/>
+      </logger>
+
+      <root level="INFO">
+          <appender-ref ref="stdout"/>
+      </root>
+    </configuration>
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: okta-ldap-agent
+  namespace: operations
+  labels:
+    app: okta-ldap-agent
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: okta-ldap-agent
+  template:
+    metadata:
+      labels:
+        app: okta-ldap-agent
+    spec:
+      containers:
+      - name: okta-ldap-agent
+        image: 10.16.3.2/operations/okta-ldap-agent
+        command:
+        - bash
+        - "-c" 
+        - | 
+          source /opt/Okta/OktaLDAPAgent/scripts/defs.sh
+          $JAVA -Dlogback.configurationFile="$AgentInstallPrefix/conf/logback.xml" -Dagent_home="$AgentInstallPrefix" -Dfile.encoding=UTF8 \
+            -jar $AgentJar -mode normal -configFilePath $ConfigFile
+        volumeMounts:
+        - name: okta-ldap-agent-configuration
+          mountPath: /opt/Okta/OktaLDAPAgent/conf 
+      initContainers:
+      - name: update-keystore
+        image: 10.16.3.2/operations/okta-ldap-agent
+        command:
+        - /opt/Okta/OktaLDAPAgent/jre/bin/keytool
+        - "-importcert"
+        - "-alias"
+        - directory.lab.crdant.net
+        - "-file"
+        - /certificates/tls.crt
+        - "-keystore"
+        - /opt/Okta/OktaLDAPAgent/jre/lib/security/cacerts
+        - "-storepass"
+        - changeit
+        - "-no prompt"
+        volumeMounts:
+        - name: openldap-certificates
+          mountPath: /certificates
+      - name: okta-ldap-agent-config
+        image: 10.16.3.2/operations/okta-ldap-agent 
+        env:
+        - name: LDAP_ADMIN_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: openldap-password
+              key: LDAP_ADMIN_PASSWORD
+        command: 
+        - bash
+        - "-c"
+        - |
+          cp /tmp/conf/* /opt/Okta/OktaLDAPAgent/conf
+          echo "$LDAP_ADMIN_PASSWORD" | /opt/Okta/OktaLDAPAgent/scripts/configure_agent.sh
+        volumeMounts:
+        - name: okta-ldap-agent-configuration
+          mountPath: /opt/Okta/OktaLDAPAgent/conf 
+        - name: okta-ldap-agent-configuration-source
+          mountPath: /tmp/conf
+      volumes:
+      - name: openldap-certificates
+        secret: 
+          secretName: openldap-server-tls
+      - name: okta-ldap-agent-configuration
+        emptyDir: {}
+      - name: okta-ldap-agent-configuration-source
+        configMap: 
+          name: okta-ldap-agent-configuration

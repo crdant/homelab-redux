@@ -1,0 +1,219 @@
+# Default values for openldap.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+# Define deployment strategy - IMPORTANT: use rollingUpdate: null when use Recreate strategy.
+# It prevents from merging with existing map keys which are forbidden.
+strategy: {}
+  # type: RollingUpdate
+  # rollingUpdate:
+  #   maxSurge: 1
+  #   maxUnavailable: 0
+  #
+  # or
+  #
+  # type: Recreate
+  # rollingUpdate: null
+image:
+  # From repository https://github.com/osixia/docker-openldap
+  repository: osixia/openldap
+  tag: 1.2.4
+  pullPolicy: IfNotPresent
+
+# Spcifies an existing secret to be used for admin and config user passwords
+existingSecret: openldap-password
+
+# settings for enabling TLS
+tls:
+  enabled: true
+  secret: openldap-server-tls  # The name of a kubernetes.io/tls type secret to use for TLS
+  CA:
+    enabled: true
+    secret: openldap-server-tls  # The name of a generic secret to use for custom CA certificate (ca.crt)
+
+## Add additional labels to all resources
+extraLabels: {}
+## Add additional annotations to pods
+podAnnotations: {}
+service:
+  annotations: {}
+  clusterIP: ""
+
+  ldapPort: 389
+  sslLdapPort: 636  # Only used if tls.enabled is true
+  ## List of IP addresses at which the service is available
+  ## Ref: https://kubernetes.io/docs/user-guide/services/#external-ips
+  ##
+  externalIPs: []
+
+  loadBalancerIP: "10.16.3.4"
+  loadBalancerSourceRanges: []
+  type: LoadBalancer
+
+# Default configuration for openldap as environment variables. These get injected directly in the container.
+# Use the env variables from https://github.com/osixia/docker-openldap#beginner-guide
+env:
+  LDAP_ORGANISATION: "Home Lab"
+  LDAP_DOMAIN: "crdant.net"
+  LDAP_BACKEND: "hdb"
+  LDAP_TLS: "true"
+  LDAP_TLS_ENFORCE: "true"
+  LDAP_REMOVE_CONFIG_AFTER_SETUP: "true"
+  LDAP_TLS_VERIFY_CLIENT: "try"
+
+# Default Passwords to use, stored as a secret. If unset, passwords are auto-generated.
+# You can override these at install time with
+# helm install openldap --set openldap.adminPassword=<passwd>,openldap.configPassword=<passwd>
+# adminPassword: admin
+# configPassword: config
+
+# Custom openldap configuration files used to override default settings
+customLdifFiles:
+  00-org-units.ldif: |-
+    dn: o=homelab,{{ LDAP_BASE_DN }}
+    objectClass: top
+    objectClass: organization
+    o: homelab
+
+    dn: ou=systems,o=homelab,{{ LDAP_BASE_DN }}
+    objectclass: organizationalUnit
+    objectclass: top
+    description: Contains entries which describe persons
+    ou: systems
+
+    dn: ou=people,o=homelab,{{ LDAP_BASE_DN }}
+    objectclass: organizationalUnit
+    objectclass: top
+    description: Contains entries which describe persons
+    ou: people
+
+    dn: ou=groups,o=homelab,{{ LDAP_BASE_DN }}
+    objectclass: organizationalUnit
+    objectclass: top
+    description: Contains entries which describe groups
+    ou: groups
+  02-service-accounts.ldif: |-
+    dn: uid=vcenter,ou=systems,o=homelab,{{ LDAP_BASE_DN }}
+    objectClass: account
+    objectClass: simpleSecurityObject
+    objectClass: top
+    uid: vcenter
+    userPassword: {SSHA}DWVEyoV1yvePyrdWSyttA4QaRdEfzDwhjgXo2Q==
+
+    dn: uid=uaa,ou=systems,o=homelab,dc=crdant,dc=net
+    objectClass: top
+    objectClass: simpleSecurityObject
+    objectClass: account
+    uid: uaa
+    userPassword: {SSHA}m+Jhb1it1jkvgkdhqqGep6HlsRYNnK5iIQSIvg==
+
+    dn: uid=gitlab,ou=systems,o=homelab,dc=crdant,dc=net
+    objectClass: top
+    objectClass: simpleSecurityObject
+    objectClass: account
+    uid: gitlab
+    userPassword: {SSHA}JzW5sgqMC1O7PKnuKi4MjlIRKde6cmo4EllmdQ==
+
+    dn: uid=vault,ou=systems,o=homelab,dc=crdant,dc=net
+    objectClass: top
+    objectClass: simpleSecurityObject
+    objectClass: account
+    uid: vault
+    userPassword: {SSHA}KGc2UJJzfMeJtiWM7NgiCT3FcOsQ11TTZYtwbQ==
+
+    dn: uid=concourse,ou=systems,o=homelab,dc=crdant,dc=net
+    objectClass: top
+    objectClass: simpleSecurityObject
+    objectClass: account
+    uid: concourse
+    userPassword: {SSHA}S/u3Dudf/MKBP77enWUGrsiovDjigFjBcAhTSg==
+
+    dn: uid=harbor,ou=systems,o=homelab,dc=crdant,dc=net
+    objectClass: top
+    objectClass: simpleSecurityObject
+    objectClass: account
+    uid: harbor
+    userPassword: {SSHA}xLiVRH1JBuJ/3NU0qUFmXeFroCn6ozcMoaJOXQ==
+  03-user-accounts.ldif: |-
+    dn: uid=crdant,ou=people,o=homelab,{{ LDAP_BASE_DN }}
+    objectclass: person
+    objectclass: organizationalPerson
+    objectclass: inetOrgPerson
+    objectclass: top
+    cn: crdant 
+    description: Chuck D'Antonio
+    givenname: Chuck
+    sn: D'Antonio
+    uid: crdant
+    mail: chuck@crdant.io 
+    userpassword: {SSHA}bespLkDIFhVy2LO9B7LFkzNu1vRJeRK8BcSNaQ==
+  04-groups.ldif: |-
+    dn: cn=developers,ou=groups,o=homelab,{{ LDAP_BASE_DN }}
+    objectclass: groupOfUniqueNames
+    objectclass: top
+    cn: developers
+    uniquemember: cn=crdant,ou=people,o=homelab,{{ LDAP_BASE_DN }}
+
+    dn: cn=operators,ou=groups,o=homelab,{{ LDAP_BASE_DN }}
+    objectclass: groupOfUniqueNames
+    objectclass: top
+    cn: developers
+    uniquemember: cn=crdant,ou=people,o=homelab,{{ LDAP_BASE_DN }}
+  99-authorization.ldif: |-
+    dn: olcDatabase={1}{{ LDAP_BACKEND }},cn=config
+    changetype: modify
+    delete: olcAccess
+    -
+    add: olcAccess
+    olcAccess: to attrs=userPassword,shadowLastChange by self write by dn="cn=admin,{{ LDAP_BASE_DN }}" write by anonymous auth by * none
+    olcAccess: to dn="o=homelab,{{ LDAP_BASE_DN }}" by dn="cn=admin,{{ LDAP_BASE_DN }}" write by self write by dn.children="ou=systems,o=homelab,{{ LDAP_BASE_DN }}" search by * none
+    olcAccess: to dn.subtree="ou=people,o=homelab,{{ LDAP_BASE_DN }}" by dn="cn=admin,{{ LDAP_BASE_DN }}" write by self write by dn.children="ou=systems,o=homelab,{{ LDAP_BASE_DN }}" read by * none
+    olcAccess: to dn.subtree="ou=groups,o=homelab,{{ LDAP_BASE_DN }}" by dn="cn=admin,{{ LDAP_BASE_DN }}" write by dn.children="ou=systems,o=homelab,{{ LDAP_BASE_DN }}" read by * none
+    olcAccess: to dn.subtree="ou=systems,o=homelab,{{ LDAP_BASE_DN }}" by dn="cn=admin,{{ LDAP_BASE_DN }}" write by dn.children="ou=systems,o=homelab,{{ LDAP_BASE_DN }}" read by * none
+    olcAccess: to * by self read by dn="cn=admin,{{ LDAP_BASE_DN }}" write by * none
+  
+## Persist data to a persistent volume
+persistence:
+  enabled: true
+  ## database data Persistent Volume Storage Class
+  ## If defined, storageClassName: <storageClass>
+  ## If set to "-", storageClassName: "", which disables dynamic provisioning
+  ## If undefined (the default) or set to null, no storageClassName spec is
+  ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+  ##   GKE, AWS & OpenStack)
+  ##
+  storageClass: vsan
+  accessMode: ReadWriteOnce
+  size: 8Gi
+  # existingClaim: ""
+
+resources: {}
+ # requests:
+ #   cpu: "100m"
+ #   memory: "256Mi"
+ # limits:
+ #   cpu: "500m"
+ #   memory: "512Mi"
+
+initResources: {}
+ # requests:
+ #   cpu: "100m"
+ #   memory: "128Mi"
+ # limits:
+ #   cpu: "100m"
+ #   memory: "128Mi"
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+## test container details
+test:
+  enabled: false
+  image:
+    repository: dduportal/bats
+    tag: 0.4.0

@@ -1,0 +1,5 @@
+[local]
+name=Local Repostory for Downloaded RPMs
+baseurl=file:///tmp/repo
+gpgcheck=0
+enabled=1

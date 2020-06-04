@@ -1,0 +1,11 @@
+---
+# specify the url for the docker image for the operator, e.g. gcr.io/<my_project>/postgres-operator
+operatorImageRepository: 10.16.3.2/toolchain/postgres-operator
+operatorImageTag: v0.3.0
+
+# specify the docker image for postgres instance, e.g. gcr.io/<my_project>/postgres-instance
+postgresImageRepository: 10.16.3.2/toolchain/postgres-instance
+postgresImageTag: v0.3.0
+
+# default values
+imagePullPolicy: IfNotPresent

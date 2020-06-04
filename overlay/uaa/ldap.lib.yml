@@ -1,0 +1,11 @@
+#@ load("@ytt:data", "data")
+#@ load("@ytt:assert", "assert")
+
+#@ def ldap():
+---
+spring_profiles: ldap
+ldap:
+  profile:
+    file: ldap/ldap-search-and-bind.xml
+  base: #@ data.values.ldap.base
+#@ end

@@ -1,0 +1,10 @@
+#@ load("@ytt:yaml", "yaml")
+#@ load("uaa.lib.yml", "config")
+#@ load("config.lib.yml", "customize")
+#@ load("@ytt:data", "data")
+#@ load("@ytt:overlay", "overlay")
+
+#@overlay/match by=overlay.subset({"metadata":{"name":"uaa-config"}})
+---
+data:
+  uaa.yml: #@ yaml.encode(customize(config()))

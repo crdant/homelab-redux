@@ -1,0 +1,608 @@
+#@ load("@ytt:data", "data")
+---
+concourse:
+  web:
+    auth:
+      bitbucketCloud:
+        enabled: false
+      cf:
+        apiUrl: 
+        enabled: false
+        skipSslValidation: false
+        useCaCert: false
+      cookieSecure: false
+      duration: 24h
+      github:
+        enabled: false
+        host: 
+        useCaCert: false
+      gitlab:
+        enabled: false
+        host: 
+      ldap:
+        bindDn: 
+        bindPw: 
+        displayName: 
+        enabled: false
+        groupSearchBaseDn: 
+        groupSearchFilter: 
+        groupSearchGroupAttr: 
+        groupSearchNameAttr: 
+        groupSearchScope: 
+        groupSearchUserAttr: 
+        host: 
+        insecureNoSsl: 
+        insecureSkipVerify: 
+        startTls: 
+        useCaCert: 
+        userSearchBaseDn: 
+        userSearchEmailAttr: 
+        userSearchFilter: 
+        userSearchIdAttr: 
+        userSearchNameAttr: 
+        userSearchScope: 
+        userSearchUsername: 
+      mainTeam:
+        bitbucketCloud:
+          team: 
+          user: 
+        cf:
+          org: 
+          space: 
+          spaceGuid: 
+          spaceWithAnyRole: 
+          spaceWithAuditorRole: 
+          spaceWithDeveloperRole: 
+          spaceWithManagerRole: 
+          user: 
+        config: ""
+        github:
+          org: 
+          team: 
+          user: 
+        gitlab:
+          group: 
+          user: 
+        ldap:
+          group: 
+          user: 
+        localUser: arceus
+        microsoft:
+          group: 
+          user: 
+        oauth:
+          group: 
+          user: 
+        oidc:
+          group: administrators
+          user: 
+      microsoft:
+        enabled: false
+        groups: 
+        onlySecurityGroups: 
+        tenant: 
+      oauth:
+        authUrl: 
+        displayName: 
+        enabled: false
+        groupsKey: 
+        scope: 
+        skipSslValidation: 
+        tokenUrl: 
+        useCaCert: 
+        userIdKey: user_id
+        userNameKey: user_name
+
+        userinfoUrl: 
+      oidc:
+        displayName: UAA
+        enabled: true
+        groupsKey: roles
+        issuer: https://uaa.tools.lab.crdant.net/oauth/token
+        scope: openid,roles
+        skipSslValidation: false
+        useCaCert: 
+        userNameKey: user_name
+    awsSecretsManager:
+      enabled: false
+      keyAuth:
+        enabled: true
+        useSessionToken: false
+      pipelineSecretTemplate: /concourse/{{.Team}}/{{.Pipeline}}/{{.Secret}}
+      region: 
+      teamSecretTemplate: /concourse/{{.Team}}/{{.Secret}}
+    awsSsm:
+      enabled: false
+      keyAuth:
+        enabled: true
+        useSessionToken: false
+      pipelineSecretTemplate: /concourse/{{.Team}}/{{.Pipeline}}/{{.Secret}}
+      region: 
+      teamSecretTemplate: /concourse/{{.Team}}/{{.Secret}}
+    baggageclaimResponseHeaderTimeout: 1m
+    bindIp: 0.0.0.0
+    bindPort: 8080
+    buildTrackerInterval: 10s
+    cliArtifactsDir: 
+    clusterName: 
+    configRBAC: ""
+    conjur:
+      applianceUrl: 
+      enabled: false
+      pipelineSecretTemplate: 
+      secretTemplate: 
+      teamSecretTemplate: 
+    containerPlacementStrategy: volume-locality
+    credhub:
+      authenticationMode: secrets
+      enabled: false
+      insecureSkipVerify: false
+      pathPrefix: 
+      url: 
+      useCaCert: false
+    datadog:
+      agentHost: 127.0.0.1
+      agentHostUseHostIP: false
+      agentPort: 8125
+      enabled: false
+      prefix: concourse.ci
+    debugBindIp: 127.0.0.1
+    debugBindPort: 8079
+    defaultBuildLogsToRetain: 
+    defaultDaysToRetainBuildLogs: 
+    defaultTaskCpuLimit: 
+    defaultTaskMemoryLimit: 
+    emitToLogs: false
+    enableBuildAuditing: false
+    enableContainerAuditing: false
+    enableGlobalResources: true
+    enableJobAuditing: false
+    enableLidar: 
+    enablePipelineAuditing: false
+    enableRedactSecrets: 
+    enableResourceAuditing: false
+    enableSystemAuditing: false
+    enableTeamAuditing: false
+    enableVolumeAuditing: false
+    enableWorkerAuditing: false
+    encryption:
+      enabled: false
+    externalUrl: https://concourse.tools.lab.crdant.net
+    gardenRequestTimeout: 
+    gc:
+      checkRecyclePeriod: 
+      interval: 30s
+      missingGracePeriod: 5m
+      oneOffGracePeriod: 5m
+    globalResourceCheckTimeout: 1h
+    influxdb:
+      batchDuration: 
+      batchSize: 
+      database: concourse
+      enabled: false
+      insecureSkipVerify: false
+      url: 
+      username: 
+    interceptIdleTimeout: 0m
+    kubernetes:
+      configPath: 
+      createTeamNamespaces: true
+      enabled: false
+      keepNamespaces: true
+      namespacePrefix: 
+      teams:
+      - main
+    letsEncrypt:
+      acmeURL: 
+      enabled: false
+    lidarCheckerInterval: 
+    lidarScannerInterval: 
+    limitActiveTasks: 
+    localAuth:
+      enabled: true
+    logClusterName: 
+    logDbQueries: false
+    logLevel: info
+    maxBuildLogsToRetain: 
+    maxConns: 
+    maxDaysToRetainBuildLogs: 
+    metrics:
+      attribute: 
+      bufferSize: 
+      captureErrorMetrics: false
+      hostName: 
+    newrelic:
+      accountId: 
+      apiKey: 
+      batchDuration: 
+      batchSize: 
+      disableCompression: 
+      enabled: false
+      servicePrefix: 
+    noop: false
+    peerAddress:
+    postgres:
+      connectTimeout: 5m
+      database: atc
+      host: conocurse-db.storage.svc
+      port: 5432
+      socket: 
+      sslmode: disable
+    prometheus:
+      bindIp: 0.0.0.0
+      bindPort: 9391
+      enabled: false
+    resourceCheckingInterval: 1m
+    resourceTypeCheckingInterval: 1m
+    riemann:
+      enabled: false
+      host: 
+      port: 5555
+      servicePrefix: 
+      tag: 
+    secretCacheDuration: 
+    secretCacheDurationNotFound: 
+    secretCacheEnabled: false
+    secretCachePurgeInterval: 
+    secretRetryAttempts: 5
+    secretRetryInterval: 1s
+    staticWorker:
+      baggageclaimUrl: 
+      enabled: false
+      gardenUrl: 
+      resource: 
+    syslog:
+      address: 
+      drainInterval: 30s
+      enabled: false
+      hostname: atc-syslog-drainer
+      transport: 
+      useCaCert: false
+    tls:
+      bindPort: 443
+      enabled: true
+    tsa:
+      atcUrl: 
+      authorizedKeys: 
+      bindIp: 0.0.0.0
+      bindPort: 2222
+      debugBindIp: 127.0.0.1
+      debugBindPort: 2221
+      heartbeatInterval: 30s
+      hostKey: 
+      logLevel: info
+      sessionSigningKey: 
+    vault:
+      authBackend: approle
+      authBackendMaxTtl: 
+      caPath: 
+      clientToken: 
+      enabled: true
+      insecureSkipVerify: false
+      namespace: 
+      pathPrefix: /concourse
+      retryInitial: 1s
+      retryMax: 5m
+      serverName: 
+      sharedPath: 
+      url: https://vault.lab.crdant.net
+      useCaCert: true
+    xFrameOptions: 
+  worker:
+    baggageclaim:
+      bindIp: 127.0.0.1
+      bindPort: 7788
+      btrfsBin: btrfs
+      debugBindIp: 127.0.0.1
+      debugBindPort: 7787
+      disableUserNamespaces: 
+      driver: naive
+      logLevel: info
+      mkfsBin: mkfs.btrfs
+      overlaysDir: 
+      reapInterval: 10s
+      volumes: 
+    bindIp: 127.0.0.1
+    bindPort: 7777
+    connectionDrainTimeout: 1h
+    containerSweeperMaxInFlight: 5
+    debugBindIp: 127.0.0.1
+    debugBindPort: 7776
+    ephemeral: 
+    externalGardenUrl: 
+    garden:
+      bin: gdn
+      config: 
+      dnsProxyEnable: 
+      requestTimeout: 
+      useHoudini: 
+    healthcheckBindIp: 0.0.0.0
+    healthcheckBindPort: 8888
+    healthcheckTimeout: 5s
+    http_proxy: 
+    https_proxy: 
+    logLevel: info
+    name: 
+    no_proxy: 
+    peerIp: 
+    rebalanceInterval: 
+    shutdownSignal: SIGUSR2
+    sweepInterval: 30s
+    tag: 
+    team: 
+    tsa:
+      hosts: 
+      - tsa.tools.lab.crdant.net
+      publicKey: 
+      workerPrivateKey: 
+    version: 
+    volumeSweeperMaxInFlight: 5
+    workDir: /concourse-work-dir
+fullnameOverride: 
+global:
+  imageNamespace: concourse-helm
+  imagePullSecrets:
+  - pivnet-credentials
+  imageRegistry: registry.pivotal.io
+images:
+  concourse:
+    digest: sha256:e3038d04e96f4ce4c84f081e99afda47192986fdf5f8c6be4152dfe6ff376e62
+    name: concourse
+    pullPolicy: IfNotPresent
+    tag: 5.8.0
+nameOverride: 
+persistence:
+  enabled: true
+  worker:
+    accessMode: ReadWriteOnce
+    size: 100Gi
+    storageClass: 
+postgresql:
+  enabled: true
+  extraEnv: []
+  global:
+    imageNamespace: concourse-helm
+    imagePullSecrets: 
+    - pivnet-credentials
+    imageRegistry: registry.pivotal.io
+    postgresql: {}
+  imagePullSecrets: 
+  - pivnet-credentials
+  images:
+    metrics:
+      digest: sha256:3a5c64dae15e522cd4c477f7ac4ffa46558be44f82f5334182d1b6d433f2bd95
+      name: postgres-exporter
+      tag: 0.7.0-debian-9-r12
+    postgresql:
+      debug: false
+      digest: sha256:ba3542b06da2b41bf346a0bd41f175eaff7f05301fa277159110ece2babd0335
+      name: postgresql
+      tag: 11.6.0-debian-9-r0
+    volumePermissions:
+      name: minideb
+      pullPolicy: Always
+      tag: stretch
+  ldap:
+    baseDN: ""
+    bind_password: 
+    bindDN: ""
+    enabled: false
+    port: ""
+    prefix: ""
+    scheme: ""
+    search_attr: ""
+    search_filter: ""
+    server: ""
+    suffix: ""
+    tls: false
+    url: ""
+  livenessProbe:
+    enabled: true
+    failureThreshold: 6
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 5
+  master:
+    affinity: {}
+    annotations: {}
+    extraInitContainers: ""
+    extraVolumeMounts: []
+    extraVolumes: []
+    labels: {}
+    nodeSelector: {}
+    podAnnotations: {}
+    podLabels: {}
+    priorityClassName: ""
+    tolerations: []
+  metrics:
+    enabled: false
+    livenessProbe:
+      enabled: true
+      failureThreshold: 6
+      initialDelaySeconds: 5
+      periodSeconds: 10
+      successThreshold: 1
+      timeoutSeconds: 5
+    prometheusRule:
+      additionalLabels: {}
+      enabled: false
+      namespace: ""
+      rules: []
+    readinessProbe:
+      enabled: true
+      failureThreshold: 6
+      initialDelaySeconds: 5
+      periodSeconds: 10
+      successThreshold: 1
+      timeoutSeconds: 5
+    securityContext:
+      enabled: false
+      runAsUser: 1001
+    service:
+      annotations:
+        prometheus.io/port: "9187"
+        prometheus.io/scrape: "true"
+      loadBalancerIP: 
+      type: ClusterIP
+    serviceMonitor:
+      additionalLabels: {}
+      enabled: false
+  networkPolicy:
+    allowExternal: true
+    enabled: false
+  persistence:
+    accessModes:
+    - ReadWriteOnce
+    annotations: {}
+    enabled: true
+    mountPath: /bitnami/postgresql
+    size: 8Gi
+    storageClass: 
+    subPath: ""
+  postgresqlDataDir: /bitnami/postgresql/data
+  postgresqlDatabase: concourse
+  postgresqlPassword: concourse
+  postgresqlUsername: concourse
+  readinessProbe:
+    enabled: true
+    failureThreshold: 6
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 5
+  replication:
+    applicationName: my_application
+    enabled: false
+    numSynchronousReplicas: 0
+    password: repl_password
+    slaveReplicas: 1
+    synchronousCommit: "off"
+    user: repl_user
+  resources:
+    requests:
+      cpu: 250m
+      memory: 256Mi
+  securityContext:
+    enabled: true
+    fsGroup: 1001
+    runAsUser: 1001
+  service:
+    annotations: {}
+    port: 5432
+    type: ClusterIP
+  serviceAccount:
+    enabled: false
+  shmVolume:
+    enabled: true
+  slave:
+    affinity: {}
+    annotations: {}
+    extraInitContainers: ""
+    extraVolumeMounts: []
+    extraVolumes: []
+    labels: {}
+    nodeSelector: {}
+    podAnnotations: {}
+    podLabels: {}
+    priorityClassName: ""
+    tolerations: []
+  updateStrategy:
+    type: RollingUpdate
+  volumePermissions:
+    enabled: true
+    securityContext:
+      runAsUser: 0
+rbac:
+  apiVersion: v1beta1
+  create: true
+  webServiceAccountName: default
+  workerServiceAccountName: default
+secrets: #@ data.values.secrets
+web:
+  additionalAffinities: 
+  additionalVolumeMounts: 
+  additionalVolumes: []
+  annotations: {}
+  authSecretsPath: /concourse-auth
+  credhubSecretsPath: /concourse-credhub
+  enabled: true
+  env: 
+  ingress:
+    annotations: {}
+    enabled: false
+    hosts: 
+    tls: 
+  keySecretsPath: /concourse-keys
+  labels: {}
+  livenessProbe:
+    failureThreshold: 5
+    httpGet:
+      path: /api/v1/info
+      port: atc
+    initialDelaySeconds: 10
+    periodSeconds: 15
+    timeoutSeconds: 3
+  nameOverride: 
+  nodeSelector: {}
+  postgresqlSecretsPath: /concourse-postgresql
+  readinessProbe:
+    httpGet:
+      path: /api/v1/info
+      port: atc
+  replicas: 1
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+  service:
+    annotations: {}
+    atcNodePort: 
+    atcTlsNodePort: 
+    labels: 
+    loadBalancerIP: 
+    loadBalancerSourceRanges: 
+    tsaNodePort: 
+    type: LoadBalancer
+  sidecarContainers: []
+  strategy: {}
+  syslogSecretsPath: /concourse-syslog
+  teamSecretsPath: /team-authorized-keys
+  tlsSecretsPath: /concourse-web-tls
+  tolerations: []
+  vaultSecretsPath: /concourse-vault
+worker:
+  additionalAffinities: {}
+  additionalVolumeMounts: []
+  additionalVolumes: []
+  annotations: {}
+  cleanUpWorkDirOnStart: true
+  emptyDirSize: 
+  enabled: true
+  env: []
+  hardAntiAffinity: false
+  hardAntiAffinityLabels: {}
+  keySecretsPath: /concourse-keys
+  labels: {}
+  livenessProbe:
+    failureThreshold: 5
+    httpGet:
+      path: /
+      port: worker-hc
+    initialDelaySeconds: 10
+    periodSeconds: 15
+    timeoutSeconds: 3
+  minAvailable: 1
+  nameOverride: 
+  nodeSelector: {}
+  podManagementPolicy: Parallel
+  readinessProbe: {}
+  replicas: 2
+  resources:
+    requests:
+      cpu: 100m
+      memory: 512Mi
+  sidecarContainers: []
+  terminationGracePeriodSeconds: 60
+  tolerations: []
+  updateStrategy: RollingUpdate
