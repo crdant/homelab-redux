@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+python3 ${PROJECT_DIR}/vendor/github.com/papivot/wcpctl/wcpctl.py $@
