@@ -1,3 +1,5 @@
+#@ load("@ytt:data", "data")
+---
 injector:
   enabled: false 
 
@@ -5,7 +7,6 @@ server:
   ingress:
     enabled: true
     labels: {}
-      # traffic: external
     annotations: 
       ncp/use-regex: "True"
 
@@ -18,7 +19,7 @@ server:
         - /(.*)
 
     tls: 
-    - secretName: vault-server-tls
+    - secretName: vault.lab.crdant.net-tls
       hosts:
         - vault.lab.crdant.net
 
@@ -27,3 +28,37 @@ server:
 
   dataStorage:
     storageClass: vsan
+
+  extraVolumes:
+  - type: secret
+    name: operations-vault-gcp-credentials
+    
+  # Run Vault in "standalone" mode. This is the default mode that will deploy if
+  # no arguments are given to helm. This requires a PVC for data storage to use
+  # the "file" backend.  This mode is not highly available and should not be scaled
+  # past a single replica.
+
+  #@yaml/text-templated-strings
+  standalone:
+    config: |
+      ui = true
+
+      listener "tcp" {
+      tls_disable = 1
+        address = "[::]:8200"
+        cluster_address = "[::]:8201"
+      }
+      storage "file" {
+        path = "/vault/data"
+      }
+
+      # Example configuration for using auto-unseal, using Google Cloud KMS. The
+      # GKMS keys must already exist, and the cluster must have a service account
+      # that is authorized to access GCP KMS.
+      seal "gcpckms" {
+        credentials = "/vault/userconfig/operations-vault-gcp-credentials/credentials.json"
+        project     = "(@= data.values.project @)"
+        region      = "global"
+        key_ring    = "(@= data.values.unseal_key.ring @)"
+        crypto_key  = "(@= data.values.unseal_key.key @)"
+      }
