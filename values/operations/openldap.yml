@@ -9,7 +9,7 @@ tls:
     secret: directory.lab.crdant.net-tls  # The name of a generic secret to use for custom CA certificate (ca.crt)
 
 service:
-  loadBalancerIP: "10.16.3.4"
+  loadBalancerIP: "10.16.3.5"
   type: LoadBalancer
 
 # Default configuration for openldap as environment variables. These get injected directly in the container.

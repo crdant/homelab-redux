@@ -1,10 +1,10 @@
 module "ldap_certificate" {
   source = "../modules/certificate"
 
-  host = "directory.${local.subdomain}"
+  host = local.ldap_host
   email = var.email
   
-  gcp_service_account = module.dns_challenge_service_account.private_key
+  gcp_service_account = data.terraform_remote_state.supervisor.outputs.dns_challenge_account_private_key
 
   namespace = var.namespace
 }

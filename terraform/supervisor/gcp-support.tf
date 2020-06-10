@@ -3,12 +3,12 @@ module "vault_service_account" {
 
     gcp_project = var.gcp_project
 
-    account_id = "${var.namespace}-vault"    
+    account_id = "${local.dashed_environment}-kms-access"    
     display_name = "Vault Automation"
-    description = "Access to KMS for Vault auto unseal"
+    description = "Access to KMS for Vault auto unseal in ${local.environment}"
     roles = [ "roles/cloudkms.cryptoKeyEncrypterDecrypter" ]
 
-    namespace = var.namespace
+    namespace = var.secrets_namespace
 }
 
 
@@ -17,16 +17,16 @@ module "dns_challenge_service_account" {
 
     gcp_project = var.gcp_project
     
-    account_id = "${var.namespace}-dns-challenge"    
+    account_id = "${local.dashed_environment}-dns-challenge"    
     display_name = "DNS Challenge"
-    description  = "Access to DNS to create certificates for services installed at ${var.namespace}"
+    description  = "Access to DNS to create certificates for services in ${local.environment}"
     roles = [ "roles/dns.admin" ]
 
-    namespace = var.namespace
+    namespace = var.secrets_namespace
 }
 
 resource "google_kms_key_ring" "vault" {
-  name     = "lab-${var.namespace}-vault"
+  name     = "${local.dashed_subdomain}-vault"
   location = "global"
 }
 

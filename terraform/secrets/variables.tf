@@ -8,7 +8,7 @@ variable "project_root" {
 
 variable "namespace" {
     type = string
-    default = "operations"
+    default = "secrets"
 }
 
 variable "domain" {
@@ -28,17 +28,8 @@ variable "gcp_key_file" {
     type = string
 }
 
-variable "vault_ldap_bind_dn" {
-    type = string
-}
-
-variable "vault_ldap_bind_password" {
-    type = string
-}
-
 locals {
     subdomain = "lab.${var.domain}"
-    ldap_host = "directory.${local.subdomain}"
    
     directories = {
         values = "${var.project_root}/values"
@@ -47,8 +38,7 @@ locals {
     }
 
     helm = { 
-        stable = "https://kubernetes-charts.storage.googleapis.com/"
-        bitnami = "https://charts.bitnami.com/bitnami" 
+        hashicorp = "https://helm.releases.hashicorp.com"
     }
     
     gcp_domain = var.gcp_domain != "" ? var.gcp_domain : var.domain 
