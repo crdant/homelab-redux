@@ -1,7 +1,11 @@
+locals {
+  vault_host = "vault.${local.subdomain}"
+}
+
 module "vault_certificate" {
   source = "../modules/certificate"
 
-  host = "vault.${local.subdomain}"
+  host = "${local.vault_host}"
   email = var.email
   
   gcp_service_account = data.terraform_remote_state.supervisor.outputs.dns_challenge_account_private_key
@@ -44,7 +48,7 @@ vault operator init
 COMMAND
   
     environment = {
-      VAULT_ADDR = "https://vault.${local.subdomain}"
+      VAULT_ADDR = "https://${local.vault_host}"
       VAULT_CACERT = local_file.vault_certificate_chain.filename
     }
   }

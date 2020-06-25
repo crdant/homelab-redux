@@ -554,7 +554,7 @@ persistence:
       bucket: harbor-image-chart-storage
       accesskey: #@ data.values.s3.accesskey 
       secretkey: #@ data.values.s3.secretkey
-      regionendpoint: https://storage.tools.lab.crdant.net
+      regionendpoint: https://s3.lab.crdant.net
       # encrypt: false
       # keyid: mykeyid
       secure: true

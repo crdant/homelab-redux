@@ -107,13 +107,19 @@ customLdifFiles:
     objectclass: groupOfUniqueNames
     objectclass: top
     cn: developers
-    uniquemember: cn=crdant,ou=people,o=homelab,{{ LDAP_BASE_DN }}
+    uniquemember: uid=crdant,ou=people,o=homelab,{{ LDAP_BASE_DN }}
 
     dn: cn=operators,ou=groups,o=homelab,{{ LDAP_BASE_DN }}
     objectclass: groupOfUniqueNames
     objectclass: top
     cn: developers
-    uniquemember: cn=crdant,ou=people,o=homelab,{{ LDAP_BASE_DN }}
+    uniquemember: uid=crdant,ou=people,o=homelab,{{ LDAP_BASE_DN }}
+
+    dn: cn=security,ou=groups,o=homelab,{{ LDAP_BASE_DN }}
+    objectclass: groupOfUniqueNames
+    objectclass: top
+    cn: developers
+    uniquemember: uid=crdant,ou=people,o=homelab,{{ LDAP_BASE_DN }}
   99-authorization.ldif: |-
     dn: olcDatabase={1}{{ LDAP_BACKEND }},cn=config
     changetype: modify

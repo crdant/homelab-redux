@@ -1,3 +1,3 @@
-output "release_name" {
-    value = random_pet.release_name.id
+output "release" {
+    value = random_pet.release[0].id
 }

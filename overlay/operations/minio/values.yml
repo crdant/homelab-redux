@@ -1,0 +1,11 @@
+#@data/values
+---
+ldap:
+  host:
+  baseDN:
+master_key:
+vault: 
+  approle:
+    id:
+    secret: 
+  endpoint:

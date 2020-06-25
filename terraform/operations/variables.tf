@@ -37,12 +37,15 @@ variable "vault_ldap_bind_password" {
 }
 
 locals {
+    base_dn = format("dc=%s", join(",dc=",split(".",var.domain)))
     subdomain = "lab.${var.domain}"
     ldap_host = "directory.${local.subdomain}"
-   
+
     directories = {
+        config = "${var.project_root}/config"
         values = "${var.project_root}/values"
         secrets = "${var.project_root}/secrets"
+        policy  = "${var.project_root}/etc/vault/policy"
         overlay = "${var.project_root}/overlay"
     }
 

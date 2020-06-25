@@ -2,12 +2,8 @@ apiVersion: vendir.k14s.io/v1alpha1
 directories:
 - contents:
   - git:
-      commitTitle: Add default port and fix type
-      sha: ae5b8b93433798b12f04f850b31995f73ec06d90
-    path: github.com/crdant/ytt-lib
-  - git:
-      commitTitle: Update wcpctl.py
-      sha: 48e62e3fd6031115f8ca649274020e9f0b8a8e71
+      commitTitle: 'Merge pull request #2 from dashaun/master...'
+      sha: ff8e2bdc1b09d319eb9b9d2d411bd6f15f2d2aa8
     path: github.com/papivot/wcpctl
   path: vendor
 kind: LockConfig

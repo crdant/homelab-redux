@@ -11,6 +11,11 @@ variable "chart" {
     type = string
 }
 
+variable "release" {
+    type = string
+    default = ""
+}
+
 variable "values" {
     type = map
     default = {}
