@@ -7,3 +7,7 @@ directories:
     git:
       url: https://github.com/papivot/wcpctl
       ref: master
+  - path: github.com/cloudfoundry/uaa
+    git:
+      url: https://github.com/cloudfoundry/uaa
+      ref: develop

@@ -5,5 +5,9 @@ directories:
       commitTitle: 'Merge pull request #2 from dashaun/master...'
       sha: ff8e2bdc1b09d319eb9b9d2d411bd6f15f2d2aa8
     path: github.com/papivot/wcpctl
+  - git:
+      commitTitle: Update UAA image reference in k8s deployment template to cfidentity/uaa@sha256:3ac401997218b057c1a4e5e400258b4dd3f874980a971b278dafcf08dc22023e
+      sha: b19a717a9b1bb3d6f52b7a0bf349b832484c7127
+    path: github.com/cloudfoundry/uaa
   path: vendor
 kind: LockConfig
