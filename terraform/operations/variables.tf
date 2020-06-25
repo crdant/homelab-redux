@@ -47,6 +47,7 @@ locals {
         secrets = "${var.project_root}/secrets"
         policy  = "${var.project_root}/etc/vault/policy"
         overlay = "${var.project_root}/overlay"
+        vendor = "${var.project_root}/vendor"
     }
 
     helm = { 
