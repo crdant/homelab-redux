@@ -27,6 +27,7 @@ resource "tls_cert_request" "request" {
 
 locals {
   certificate_request = var.request != "" ? var.request : tls_cert_request.request[0].cert_request_pem
+  secret = var.secret != "" ? var.secret : "${var.host}-tls"
 }
 
 resource "acme_certificate" "certificate" {
@@ -44,7 +45,7 @@ resource "acme_certificate" "certificate" {
 
 resource "kubernetes_secret" "tls_secret" {
   metadata {
-    name = "${var.host}-tls"
+    name = local.secret
     namespace = var.namespace
   }
 

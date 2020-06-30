@@ -14,6 +14,11 @@ variable "host" {
     default = ""
 }
 
+variable "secret" {
+    type = string
+    default = ""
+}
+
 variable "alternates" {
     type = "list"
     default = []
