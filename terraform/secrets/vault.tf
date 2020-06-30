@@ -6,6 +6,7 @@ module "vault_certificate" {
   source = "../modules/certificate"
 
   host = "${local.vault_host}"
+  secret = "vault-tls"
   email = var.email
   
   gcp_service_account = data.terraform_remote_state.supervisor.outputs.dns_challenge_account_private_key
@@ -21,6 +22,8 @@ module "vault_chart" {
   namespace = var.namespace
 
   values = {
+    host = local.vault_host
+    tls_secret = module.vault_certificate.secret
     project = var.gcp_project
     "unseal_key.ring" = data.terraform_remote_state.supervisor.outputs.unseal_keyring
     "unseal_key.key"  = data.terraform_remote_state.supervisor.outputs.unseal_key
