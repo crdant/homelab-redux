@@ -41,18 +41,3 @@ resource "acme_certificate" "certificate" {
     }
   }
 }
-
-resource "kubernetes_secret" "tls_secret" {
-  metadata {
-    name = "${var.host}-tls"
-    namespace = var.namespace
-  }
-
-  data = {
-    "tls.key" = tls_private_key.certificate_key.private_key_pem
-    "tls.crt"  = acme_certificate.certificate.certificate_pem
-    "ca.crt"  = acme_certificate.certificate.issuer_pem
-  }
-
-  type = "kubernetes.io/tls"
-}

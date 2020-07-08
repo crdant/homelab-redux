@@ -13,6 +13,31 @@ module "vault_certificate" {
   namespace = var.namespace
 }
 
+resource "kubernetes_secret" "vault_tls" {
+  metadata {
+    name = "${local.vault_host}-tls"
+    namespace = var.namespace
+  }
+
+  data = {
+    "tls.key" = vault_certrificate.private_key
+    "tls.crt"  = vault_certrificate.certificate
+    "ca.crt"  = vault_certificate.issuer 
+  }
+
+  type = "kubernetes.io/tls"
+}
+
+resource "kubernetes_secret" "unseal_account_credentials" {
+  metadata {
+    name = "-gcp-credentials"
+    namespace = var.namespace
+  }
+  data = {
+    "credentials.json" = base64decode(terraform_remote_state.infrastructure.outputs.unseal_account_private_key)
+  }
+}
+
 module "vault_chart" {
   source = "../modules/helm_chart"
 

@@ -1,13 +1,12 @@
-output "secret" {
-    value = kubernetes_secret.tls_secret.metadata[0].name
+output "private_key" {
+    value = acme_certificate.certificate.private_key_pem
+    sensitive = true
 }
 
 output "certificate" {
     value = acme_certificate.certificate.certificate_pem
-    depends_on = [ kubernetes_secret.tls_secret ]
 }
 
 output "issuer" {
     value = acme_certificate.certificate.issuer_pem
-    depends_on = [ kubernetes_secret.tls_secret ]
 }
