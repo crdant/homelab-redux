@@ -19,6 +19,10 @@ variable "hypervisor_license" {
     type = string
 }
 
+variable "hypervisor6_license" {
+    type = string
+}
+
 variable "project_root" {
     type = string
 }
