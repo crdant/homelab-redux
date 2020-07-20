@@ -27,6 +27,19 @@ locals {
   ]
 }
 
+resource "vsphere_vnic" "management" {
+  count = length(local.host_ids)
+
+  host                    = local.host_ids[count.index]
+  distributed_switch_port = vsphere_distributed_virtual_switch.homelab.id
+  distributed_port_group  = vsphere_distributed_port_group.management.id
+  
+  ipv4 {
+    dhcp = true
+  }
+  netstack = "defaultTcpipStack"
+}
+
 resource "vsphere_vnic" "witness" {
   count = length(local.host_ids)
 
@@ -35,7 +48,6 @@ resource "vsphere_vnic" "witness" {
   distributed_port_group  = vsphere_distributed_port_group.witness.id
   ipv4 {
     dhcp = true
-    gw = "10.18.2.1"
   }
 
   netstack = "defaultTcpipStack"
@@ -52,6 +64,8 @@ resource "vsphere_vnic" "witness" {
       host     = local.host_names[count.index]
     }
   }
+
+  depends_on = [ vsphere_vnic.management ]
 }
 
 resource "vsphere_vnic" "storage" {
@@ -79,7 +93,6 @@ resource "vsphere_vnic" "storage" {
 			host     = local.host_names[count.index]
 		}
 	}
-
 
   depends_on = [ vsphere_vnic.witness ]
 }
