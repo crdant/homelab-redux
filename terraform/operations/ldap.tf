@@ -16,9 +16,9 @@ resource "kubernetes_secret" "ldap_tls" {
   }
 
   data = {
-    "tls.key" = ldap_certrificate.private_key
-    "tls.crt"  = ldap_certrificate.certificate
-    "ca.crt"  = ldap_certificate.issuer 
+    "tls.key" = module.ldap_certificate.private_key
+    "tls.crt"  = module.ldap_certificate.certificate
+    "ca.crt"  = module.ldap_certificate.issuer 
   }
 
   type = "kubernetes.io/tls"

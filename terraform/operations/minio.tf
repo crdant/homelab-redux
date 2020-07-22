@@ -16,9 +16,9 @@ resource "kubernetes_secret" "minio_tls" {
   }
 
   data = {
-    "tls.key" = minio_certrificate.private_key
-    "tls.crt"  = minio_certrificate.certificate
-    "ca.crt"  = minio_certificate.issuer 
+    "tls.key" = module.minio_certificate.private_key
+    "tls.crt"  = module.minio_certificate.certificate
+    "ca.crt"  = module.minio_certificate.issuer 
   }
 
   type = "kubernetes.io/tls"
