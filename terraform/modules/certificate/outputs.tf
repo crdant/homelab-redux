@@ -1,5 +1,5 @@
 output "private_key" {
-    value = acme_certificate.certificate.private_key_pem
+    value = tls_private_key.certificate_key.private_key_pem
     sensitive = true
 }
 
