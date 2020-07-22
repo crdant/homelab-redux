@@ -27,6 +27,7 @@ locals {
     base_dn = format("dc=%s", join(",dc=",split(".",var.domain)))
     subdomain = data.terraform_remote_state.infrastructure.outputs.subdomain
     ldap_host = "directory.${local.subdomain}"
+    minio_host = "local.${local.subdomain}"
 
     directories = {
         config = "${var.project_root}/config"
