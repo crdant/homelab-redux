@@ -45,3 +45,19 @@ ${module.scotch_certificate.certificate}
 CHAIN
   filename = "${local.directories.secrets}/scotch.${local.subdomain}.crt"
 }
+
+module "witness_certificate" {
+  source = "../modules/certificate"
+
+  request = file("${local.directories.secrets}/witness.${local.subdomain}.csr")
+  email = var.email
+   
+  gcp_service_account = module.dns_challenge_service_account.private_key
+}
+
+resource "local_file" "witness_certificate" {
+  content = <<CHAIN
+${module.witness_certificate.certificate}
+CHAIN
+  filename = "${local.directories.secrets}/witness.${local.subdomain}.crt"
+}
