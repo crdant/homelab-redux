@@ -1,3 +1,19 @@
+output "environment" {
+  value = local.environment 
+}
+
+output "subdomain" {
+  value = local.subdomain
+}
+
+output "gcp_domain" {
+  value = local.gcp_domain
+}
+
+output "gcp_project" {
+  value = var.gcp_project
+}
+
 output "dns_challenge_account_id" {
   value = module.dns_challenge_service_account.id
 }

@@ -11,25 +11,10 @@ variable "namespace" {
     default = "secrets"
 }
 
-variable "domain" {
-    type = string
-}
-
-variable "gcp_domain" {
-    type = string
-    default = ""
-}
-
-variable "gcp_project" {
-    type = string
-}
-
-variable "gcp_key_file" {
-    type = string
-}
-
 locals {
-    subdomain = "lab.${var.domain}"
+    subdomain = data.terraform_remote_state.infrastructure.outputs.subdomain
+    gcp_domain = data.terraform_remote_state.infrastructure.outputs.gcp_domain
+    gcp_project = data.terraform_remote_state.infrastructure.outputs.gcp_project
    
     directories = {
         values = "${var.project_root}/values"
@@ -40,6 +25,4 @@ locals {
     helm = { 
         hashicorp = "https://helm.releases.hashicorp.com"
     }
-    
-    gcp_domain = var.gcp_domain != "" ? var.gcp_domain : var.domain 
 }
