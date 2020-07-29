@@ -4,9 +4,24 @@ module "ldap_certificate" {
   host = local.ldap_host
   email = var.email
   
-  gcp_service_account = data.terraform_remote_state.supervisor.outputs.dns_challenge_account_private_key
+  gcp_service_account = data.terraform_remote_state.infrastructure.outputs.dns_challenge_account_private_key
 
   namespace = var.namespace
+}
+
+resource "kubernetes_secret" "ldap_tls" {
+  metadata {
+    name = "${local.ldap_host}-tls"
+    namespace = var.namespace
+  }
+
+  data = {
+    "tls.key" = module.ldap_certificate.private_key
+    "tls.crt"  = module.ldap_certificate.certificate
+    "ca.crt"  = module.ldap_certificate.issuer 
+  }
+
+  type = "kubernetes.io/tls"
 }
 
 resource "random_pet" "ldap_admin_password" {

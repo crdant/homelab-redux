@@ -1,7 +1,7 @@
-data "terraform_remote_state" "supervisor" {
+data "terraform_remote_state" "infrastructure" {
   backend = "local"
 
   config = {
-    path = "${path.module}/../supervisor/terraform.tfstate"
+    path = "${path.module}/../infrastructure/terraform.tfstate"
   }
 }

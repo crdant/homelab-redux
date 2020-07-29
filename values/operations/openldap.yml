@@ -53,7 +53,7 @@ customLdifFiles:
     objectClass: simpleSecurityObject
     objectClass: top
     uid: vcenter
-    userPassword: {SSHA}DWVEyoV1yvePyrdWSyttA4QaRdEfzDwhjgXo2Q==
+    userPassword: {SSHA}lvvTaNIg08gsmvHDYeeBgWCUZXhAzBjTmZv46g==
 
     dn: uid=uaa,ou=systems,o=homelab,dc=crdant,dc=net
     objectClass: top

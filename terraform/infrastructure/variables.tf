@@ -7,8 +7,33 @@ variable "email" {
     type = string
 }
 
+variable "vcenter_password" {
+    type = string
+}
+
+variable "hypervisor_password" {
+    type = string
+}
+
+variable "hypervisor_license" {
+    type = string
+}
+
+variable "hypervisor6_license" {
+    type = string
+}
+
 variable "project_root" {
     type = string
+}
+
+variable "domain" {
+    type = string
+}
+
+resource "random_pet" "environment" {
+    length = 2 
+    separator = "."
 }
 
 variable "default_namespace" {
@@ -26,10 +51,6 @@ variable "directory_namespace" {
     default = "operations"
 }
 
-variable "domain" {
-    type = string
-}
-
 variable "gcp_domain" {
     type = string
     default = ""
@@ -39,30 +60,18 @@ variable "gcp_project" {
     type = string
 }
 
-variable "gcp_key_file" {
-    type = string
-}
-
-resource "random_pet" "environment" {
-    length = 2 
-}
-
 locals {
     environment = var.environment != "" ? var.environment : random_pet.environment.id
     dashed_environment = replace(local.environment, ".", "-")
 
     subdomain = "${local.environment}.${var.domain}"
     dashed_subdomain = replace(local.subdomain, ".", "-")
-   
+
+    supervisor_host = "supervisor.${local.subdomain}"
+
     directories = {
-        values = "${var.project_root}/values"
         secrets = "${var.project_root}/secrets"
-        overlay = "${var.project_root}/overlay"
     }
 
-    helm = { 
-        hashicorp = "https://helm.releases.hashicorp.com"
-    }
-    
     gcp_domain = var.gcp_domain != "" ? var.gcp_domain : var.domain 
 }

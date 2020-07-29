@@ -4,9 +4,24 @@ module "minio_certificate" {
   host = "s3.${local.subdomain}"
   email = var.email
   
-  gcp_service_account = data.terraform_remote_state.supervisor.outputs.dns_challenge_account_private_key
+  gcp_service_account = data.terraform_remote_state.infrastructure.outputs.dns_challenge_account_private_key
 
   namespace = var.namespace
+}
+
+resource "kubernetes_secret" "minio_tls" {
+  metadata {
+    name = "${local.minio_host}-tls"
+    namespace = var.namespace
+  }
+
+  data = {
+    "tls.key" = module.minio_certificate.private_key
+    "tls.crt"  = module.minio_certificate.certificate
+    "ca.crt"  = module.minio_certificate.issuer 
+  }
+
+  type = "kubernetes.io/tls"
 }
 
 resource "random_pet" "access_key" { 

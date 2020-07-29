@@ -1,9 +1,21 @@
-output "dns_challenge_account_id" {
-  value = module.dns_challenge_service_account.id
+output "environment" {
+  value = local.environment 
 }
 
-output "dns_challenge_credentials_secret" {
-  value = module.dns_challenge_service_account.secret
+output "subdomain" {
+  value = local.subdomain
+}
+
+output "gcp_domain" {
+  value = local.gcp_domain
+}
+
+output "gcp_project" {
+  value = var.gcp_project
+}
+
+output "dns_challenge_account_id" {
+  value = module.dns_challenge_service_account.id
 }
 
 output "dns_challenge_account_private_key" {
@@ -13,10 +25,6 @@ output "dns_challenge_account_private_key" {
 
 output "unseal_account_id" {
   value = module.vault_service_account.id
-}
-
-output "unseal_credentials_secret" {
-  value = module.vault_service_account.secret
 }
 
 output "unseal_account_private_key" {
@@ -30,4 +38,8 @@ output "unseal_keyring" {
 
 output "unseal_key" {
   value = google_kms_crypto_key.unseal.name 
+}
+
+output "rye_id" { 
+  value = data.vsphere_host.rye.id
 }
