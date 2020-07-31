@@ -5,7 +5,7 @@ metadata:
   datacenter: garage
   cluster: homelab
 spec:
-  namespace: toolchain
+  namespace: tools
   description: 
   access_list:
   - role: EDIT
