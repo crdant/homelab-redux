@@ -7,3 +7,5 @@ directories:
     git:
       url: https://github.com/papivot/wcpctl
       ref: master
+  - path: network.pivotal.io/postgres-for-kubernetes
+    manual: {}
