@@ -77,5 +77,6 @@ locals {
     helm = { 
         stable = "https://kubernetes-charts.storage.googleapis.com/"
         bitnami = "https://charts.bitnami.com/bitnami" 
+        jetstack = "https://charts.jetstack.io"
     }
 }
