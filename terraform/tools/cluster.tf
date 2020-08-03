@@ -30,6 +30,8 @@ resource "null_resource" "tools_cluster" {
 } 
 
 data "kubernetes_secret" "kubeconfig" {
+  provider = kubernetes.supervisor_cluster
+
   metadata {
     name = "${var.cluster_name}-kubeconfig"
     namespace = var.namespace
@@ -46,3 +48,24 @@ resource "local_file" "kubeconfig" {
   filename = "${local.directories.secrets}/${var.cluster_name}.kubeconfig"
 }
 
+resource "kubernetes_cluster_role_binding" "default_psp" {
+  provider = kubernetes.tools_cluster
+
+  metadata {
+    name = "clusterrolebinding-default-restricted-sa"
+  }
+  role_ref {
+    kind = "ClusterRole"
+    name = "psp:vmware-system-restricted"
+    api_group = "rbac.authorization.k8s.io"
+  }
+  subject {
+    kind = "Group"
+    name = "system:serviceaccounts"
+    api_group = "rbac.authorization.k8s.io"
+  }
+
+  depends_on = [
+    local_file.kubeconfig
+  ]
+}
