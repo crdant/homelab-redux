@@ -30,6 +30,8 @@ resource "null_resource" "tools_cluster" {
 } 
 
 data "kubernetes_secret" "kubeconfig" {
+  provider = kubernetes.supervisor_cluster
+
   metadata {
     name = "${var.cluster_name}-kubeconfig"
     namespace = var.namespace
