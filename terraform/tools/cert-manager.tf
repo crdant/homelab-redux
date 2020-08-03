@@ -1,7 +1,12 @@
 resource "kubernetes_namespace" "cert_manager" {
+  provider = kubernetes.tools_cluster
   metadata {
     name = "cert-manager"
   }
+
+  depends_on = [
+    local_file.kubeconfig
+  ]
 }
 
 module "cert_manager_chart" {
@@ -12,4 +17,8 @@ module "cert_manager_chart" {
   namespace = kubernetes_namespace.cert_manager.metadata.0.name
 
   values_files = list("${local.directories.values}/${var.namespace}/cert-manager.yml")
+
+  providers = {
+    helm = helm.tools_cluster
+  }
 }
