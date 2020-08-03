@@ -1,5 +1,6 @@
-provider "google" {
-  credentials = file("${local.directories.secrets}/gcp-homelab-service-account.json")
-  project     = "crdant-net"
-  region      = "us-east-4"
+provider "helm" {
+  alias = "tools_cluster"
+  kubernetes { 
+    config_path = "${local.directories.secrets}/${var.namespace}.kubeconfig"
+  }
 }
