@@ -1,0 +1,16 @@
+#@data/values
+---
+subdomain: 
+harborAdminPassword: 
+secretKey:  
+
+core:
+  secret:
+
+s3:
+  host:
+  accessKey:
+  secretKey:
+
+postgres:
+  password:
