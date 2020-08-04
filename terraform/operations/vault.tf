@@ -21,7 +21,7 @@ resource "vault_policy" "security" {
 resource "vault_ldap_auth_backend_group" "security" {
     groupname = "security"
     policies  = ["security"]
-    backend   = "${vault_ldap_auth_backend.ldap.path}"
+    backend   = vault_ldap_auth_backend.ldap.path
 }
 
 resource "vault_policy" "operators" {
@@ -32,7 +32,7 @@ resource "vault_policy" "operators" {
 resource "vault_ldap_auth_backend_group" "operators" {
     groupname = "operators"
     policies  = ["operators"]
-    backend   = "${vault_ldap_auth_backend.ldap.path}"
+    backend   = vault_ldap_auth_backend.ldap.path
 }
 
 resource "vault_policy" "developers" {
@@ -43,7 +43,7 @@ resource "vault_policy" "developers" {
 resource "vault_ldap_auth_backend_group" "developers" {
     groupname = "developers"
     policies  = ["developers"]
-    backend   = "${vault_ldap_auth_backend.ldap.path}"
+    backend   = vault_ldap_auth_backend.ldap.path
 }
 
 resource "vault_mount" "transit" {

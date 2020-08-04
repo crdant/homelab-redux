@@ -15,7 +15,7 @@ variable "host" {
 }
 
 variable "alternates" {
-    type = "list"
+    type = list
     default = []
 }
 
