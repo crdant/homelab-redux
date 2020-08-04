@@ -46,7 +46,7 @@ resource "kubernetes_secret" "minio" {
 }
 
 resource "vault_transit_secret_backend_key" "minio" {
-  backend = "${vault_mount.transit.path}"
+  backend = vault_mount.transit.path
   name    = "minio"
 }
 
@@ -62,8 +62,8 @@ resource "vault_approle_auth_backend_role" "minio" {
 }
 
 resource "vault_approle_auth_backend_role_secret_id" "minio" {
-  backend   = "${vault_auth_backend.approle.path}"
-  role_name = "${vault_approle_auth_backend_role.minio.role_name}"
+  backend   = vault_auth_backend.approle.path
+  role_name = vault_approle_auth_backend_role.minio.role_name
 }
 
 locals {
@@ -90,8 +90,6 @@ module "minio_chart" {
   values = {
     "master_key" = random_id.kms_master_key.hex
     "vault" = yamlencode(local.minio_vault_config)
-    "ldap.host" = local.ldap_host
-    "ldap.baseDN" = local.base_dn
   }
 
   values_files = list("${local.directories.values}/${var.namespace}/minio.yml")

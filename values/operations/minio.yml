@@ -11,22 +11,6 @@ useCredentialsFile: true
 ## Define custom environment variables to pass to the image here
 ##
 extraEnv: 
-- name: MINIO_IDENTITY_LDAP_SERVER_ADDR
-  value: #@ "ldaps://{}".format(data.values.ldap.host)
-- name: MINIO_IDENTITY_LDAP_USERNAME_FORMAT
-  value: #@ "uid=%s,ou=people,o=homelab,{}".format(data.values.ldap.baseDN)
-- name: MINIO_IDENTITY_LDAP_USERNAME_SEARCH_FILTER
-  value: (uid=%s)
-- name: MINIO_IDENTITY_LDAP_GROUP_SEARCH_FILTER
-  value: (&(objectclass=groupOfUniqueNames)(memberOf=%s))
-- name: MINIO_IDENTITY_LDAP_GROUP_SEARCH_BASE_DN
-  value: #@ "ou=groups,o=homelab,{}".format(data.values.ldap.baseDN)
-- name: MINIO_IDENTITY_LDAP_USERNAME_SEARCH_BASE_DN
-  value: #@ "ou=people,o=homelab,{}".format(data.values.ldap.baseDN)
-- name: MINIO_IDENTITY_LDAP_GROUP_NAME_ATTRIBUTE
-  value: cn
-- name: MINIO_IDENTITY_LDAP_TLS_SKIP_VERIFY
-  value: "off"
 - name: MINIO_KMS_VAULT_ENDPOINT
   value: #@ data.values.vault.endpoint
 - name: MINIO_KMS_VAULT_CAPATH
