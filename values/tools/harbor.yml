@@ -97,7 +97,7 @@ persistence:
     ##
     s3:
       region: us-west-1
-      bucket: harbor-image-chart-storage
+      bucket: #@ data.values.s3.bucket
       accesskey: #@ data.values.s3.accessKey 
       secretkey: #@ data.values.s3.secretKey
       regionendpoint: #@ "https://{}".format(data.values.s3.host)

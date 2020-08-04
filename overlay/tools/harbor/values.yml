@@ -9,6 +9,7 @@ core:
 
 s3:
   host:
+  bucket:
   accessKey:
   secretKey:
 
