@@ -11,7 +11,7 @@ service:
   ## K8s service type
   ## Allowed values are "Ingress", "ClusterIP", "NodePort" or "LoadBalancer"
   ##
-  type: Ingress
+  type: ClusterIP
   ## TLS parameters
   ##
   tls:
@@ -31,28 +31,21 @@ service:
     ##
     secretName: #@ "registry.{}-tls".format(data.values.subdomain)
     
-  ## Ingress parameters
+## Ingress parameters
+##
+ingress:
+  ## The list of hostnames to be covered with this ingress record
   ##
-  ingress:
-    ## The list of hostnames to be covered with this ingress record
-    ##
-    hosts:
-      core: #@ "registry.{}".format( data.values.subdomain )
-      notary: #@ "notary.{}".format( data.values.subdomain )
-      
-    ## Set to the type of ingress controller if it has specific requirements.
-    ## leave as `default` for most ingress controllers.
-    ## set to `gce` if using the GCE ingress controller
-    ## set to `ncp` if using the NCP (NSX-T Container Plugin) ingress controller
-    ##
-    controller: contour
-
-    ## Ingress annotations done as key:value pairs
-    ## For a full list of possible ingress annotations, please see
-    ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
-    ##
-    annotations:
-      ingress.kubernetes.io/ssl-redirect: "true"
+  hosts:
+    core: #@ "registry.{}".format( data.values.subdomain )
+    notary: #@ "notary.{}".format( data.values.subdomain )
+    
+  ## Set to the type of ingress controller if it has specific requirements.
+  ## leave as `default` for most ingress controllers.
+  ## set to `gce` if using the GCE ingress controller
+  ## set to `ncp` if using the NCP (NSX-T Container Plugin) ingress controller
+  ##
+  controller: contour
 
 ## The external URL for Harbor core service. It is used to
 ## 1) populate the docker/helm commands showed on portal
