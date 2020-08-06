@@ -2,9 +2,9 @@
 ---
 subdomain: 
 harborAdminPassword: 
-secretKey:  
 
 core:
+  secretKey:  
   secret:
 
 s3:

@@ -3,18 +3,15 @@ resource "kubernetes_namespace" "registry" {
   metadata {
     name = "registry"
   }
-
-  depends_on = [
-    local_file.kubeconfig
-  ]
 }
 
-resource "random_password" "admin" {
+resource "random_password" "registry_admin" {
   length = 20
   min_upper = 2
   min_lower = 2
   min_numeric = 2
   min_special = 2
+  override_special = "!@#$%&()-_=+[]{}<>?"
 }
 
 resource "random_password" "secret_key" {
@@ -67,14 +64,14 @@ resource "minio_iam_user_policy_attachment" "harbor" {
 module "harbor_chart" {
   source = "../modules/helm_chart"
 
-  repository  = local.helm.jetstack
+  repository  = local.helm.bitnami
   chart = "harbor"
   namespace = kubernetes_namespace.registry.metadata.0.name
 
   values = {
     "subdomain" = local.subdomain
-    "harborAdminPassword" = random_password.admin.result
-    "secretKey" = random_password.secret_key.result
+    "harborAdminPassword" = random_password.registry_admin.result
+    "core.secretKey" = random_password.secret_key.result
     "core.secret" = random_password.core_secret.result
     "s3.host" = data.terraform_remote_state.operations.outputs.minio_host
     "s3.bucket" = minio_s3_bucket.harbor.id

@@ -123,13 +123,13 @@ forcePassword: true
 ##
 harborAdminPassword: #@ data.values.harborAdminPassword 
 
-## The secret key used for encryption. Must be a string of 16 chars.
-##
-secretKey: #@ data.values.secretKey
-
 ## Harbor Core parameters
 ##
 core:
+  ## The secret key used for encryption. Must be a string of 16 chars.
+  ##
+  secretKey: #@ data.values.core.secretKey
+
   ## Secret is used when core server communicates with other components.
   ## If a secret key is not specified, Helm will generate one.
   ## Must be a string of 16 chars.
