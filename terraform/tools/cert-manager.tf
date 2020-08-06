@@ -3,10 +3,6 @@ resource "kubernetes_namespace" "cert_manager" {
   metadata {
     name = "cert-manager"
   }
-
-  depends_on = [
-    local_file.kubeconfig
-  ]
 }
 
 module "cert_manager_chart" {
