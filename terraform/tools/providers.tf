@@ -7,7 +7,6 @@ provider "kubernetes" {
 provider "kubernetes" {
   alias = "tools_cluster"
   config_path = "${local.directories.secrets}/${var.namespace}.kubeconfig"
-  config_context = "kubernetes-admin@${var.namespace}"
 }
 
 provider "helm" {
