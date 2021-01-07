@@ -9,7 +9,7 @@ resource "vsphere_host" "scotch" {
 resource "vsphere_distributed_virtual_switch" "legacy" {
   name          = "legacy"
   version       = "6.5.0"
-  datacenter_id = "${data.vsphere_datacenter.garage.id}"
+  datacenter_id = data.vsphere_datacenter.garage.id
   max_mtu       = 2000
 
   host {
@@ -20,14 +20,14 @@ resource "vsphere_distributed_virtual_switch" "legacy" {
 
 resource "vsphere_distributed_port_group" "legacy_infra" {
   name                            = "legacy-infra-pg"
-  distributed_virtual_switch_uuid = "${vsphere_distributed_virtual_switch.legacy.id}"
+  distributed_virtual_switch_uuid = vsphere_distributed_virtual_switch.legacy.id
 
   vlan_id = 101
 }
 
 resource "vsphere_distributed_port_group" "legacy_witness" {
   name                            = "legacy-witness-pg"
-  distributed_virtual_switch_uuid = "${vsphere_distributed_virtual_switch.legacy.id}"
+  distributed_virtual_switch_uuid = vsphere_distributed_virtual_switch.legacy.id
 
   vlan_id = 102
 }

@@ -41,5 +41,5 @@ output "unseal_key" {
 }
 
 output "rye_id" { 
-  value = data.vsphere_host.rye.id
+  value = vsphere_host.rye.id
 }

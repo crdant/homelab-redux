@@ -1,10 +1,10 @@
-data "vsphere_host" "rye" { 
-  name = "rye.lab.crdant.net"
+data "vsphere_host" "bourbon" { 
+  name = "bourbon.lab.crdant.net"
   datacenter_id = data.vsphere_datacenter.garage.id
 }
 
-resource "vsphere_host" "bourbon" { 
-  hostname = "bourbon.lab.crdant.net"
+resource "vsphere_host" "rye" { 
+  hostname = "rye.lab.crdant.net"
   username = "root"
   password = var.hypervisor_password
   license  = var.hypervisor_license
@@ -12,8 +12,8 @@ resource "vsphere_host" "bourbon" {
 }
 
 locals {
-  host_names = [ vsphere_host.bourbon.hostname, data.vsphere_host.rye.name ]
-  host_ids = [ vsphere_host.bourbon.id, data.vsphere_host.rye.id ]
+  host_names = [ data.vsphere_host.bourbon.name, vsphere_host.rye.hostname ]
+  host_ids = [ data.vsphere_host.bourbon.id, vsphere_host.rye.id ]
   homelab_interfaces = [
     "vmnic0",
     "vmnic1",

@@ -2,8 +2,8 @@ apiVersion: vendir.k14s.io/v1alpha1
 directories:
 - contents:
   - git:
-      commitTitle: 'Merge pull request #2 from dashaun/master...'
-      sha: ff8e2bdc1b09d319eb9b9d2d411bd6f15f2d2aa8
+      commitTitle: Update README.md
+      sha: c75f5a2f68bc6d76d82522a36880ad3d38447398
     path: github.com/papivot/wcpctl
   path: vendor
 kind: LockConfig
